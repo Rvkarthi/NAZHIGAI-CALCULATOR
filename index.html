@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nazhigai Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .result-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Nazhigai Calculator</h2>
+
+        <form id="calculatorForm">
+            <!-- First Row -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="n1" class="form-label">Nazhigai</label>
+                    <input type="number" id="n1" class="form-control" placeholder="Enter Nazhigai">
+                </div>
+                <div class="col-md-4">
+                    <label for="v1" class="form-label">Vinazhigai</label>
+                    <input type="number" id="v1" class="form-control" placeholder="Enter Vinazhigai">
+                </div>
+                <div class="col-md-4">
+                    <label for="t1" class="form-label">Tharparai</label>
+                    <input type="number" id="t1" class="form-control" placeholder="Enter Tharparai">
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="n2" class="form-label">Nazhigai</label>
+                    <input type="number" id="n2" class="form-control" placeholder="Enter Nazhigai">
+                </div>
+                <div class="col-md-4">
+                    <label for="v2" class="form-label">Vinazhigai</label>
+                    <input type="number" id="v2" class="form-control" placeholder="Enter Vinazhigai">
+                </div>
+                <div class="col-md-4">
+                    <label for="t2" class="form-label">Tharparai</label>
+                    <input type="number" id="t2" class="form-control" placeholder="Enter Tharparai">
+                </div>
+            </div>
+
+            <!-- Operation Selection -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="operation" class="form-label">Select Operation</label>
+                    <select id="operation" class="form-select">
+                        <option value="subtract">Subtract</option>
+                        <option value="divide">Divide</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="row mb-3">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-primary" onclick="calculateResult()">Calculate</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Result Box -->
+        <div id="result" class="result-box text-center">
+            <h3>Result:</h3> <span id="resultValue">-</span>
+        </div>
+    </div>
+
+    <script>
+        function nazhigaiToSec(nazhigai, vinazhigai, tharparai) {
+            return (nazhigai * 1440 + vinazhigai * 24 + tharparai);
+        }
+
+        function calculateResult() {
+            const n1 = parseInt(document.getElementById('n1').value) || 0;
+            const v1 = parseInt(document.getElementById('v1').value) || 0;
+            const t1 = parseInt(document.getElementById('t1').value) || 0;
+            const n2 = parseInt(document.getElementById('n2').value) || 0;
+            const v2 = parseInt(document.getElementById('v2').value) || 0;
+            const t2 = parseInt(document.getElementById('t2').value) || 0;
+            const operation = document.getElementById('operation').value;
+
+            let result = { nazhigai: 0, vinazhigai: 0, tharparai: 0 };
+
+            const totalSeconds1 = nazhigaiToSec(n1, v1, t1);
+            const totalSeconds2 = nazhigaiToSec(n2, v2, t2);
+
+            if (operation === 'subtract') {
+                const totalSeconds = totalSeconds1 - totalSeconds2;
+                if (totalSeconds >= 0) {
+                    result.nazhigai = Math.floor(totalSeconds / 1440);
+                    const remainingSeconds = totalSeconds % 1440;
+                    result.vinazhigai = Math.floor(remainingSeconds / 24);
+                    result.tharparai = remainingSeconds % 24;
+                }
+            } else if (operation === 'divide') {
+                if (totalSeconds2 !== 0) {
+                    const ratio = totalSeconds1 / totalSeconds2;
+                    result.nazhigai = Math.floor(ratio);
+                    result.vinazhigai = Math.floor((ratio - result.nazhigai) * 60);
+                    result.tharparai = Math.round(((ratio - result.nazhigai) * 60 - result.vinazhigai) * 60);
+                }
+            }
+
+            document.getElementById('resultValue').innerHTML =
+                `<h1>${result.nazhigai} Nazhigai, ${result.vinazhigai} Vinazhigai, ${result.tharparai} Tharparai</h1>`;
+        }
+    </script>
+</body>
+</html>
