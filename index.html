@@ -60,6 +60,7 @@
                     <select id="operation" class="form-select">
                         <option value="subtract">Subtract</option>
                         <option value="divide">Divide</option>
+                        <option value="addition">Addition</option>
                     </select>
                 </div>
             </div>
@@ -99,6 +100,15 @@
 
             if (operation === 'subtract') {
                 const totalSeconds = totalSeconds1 - totalSeconds2;
+                if (totalSeconds >= 0) {
+                    result.nazhigai = Math.floor(totalSeconds / 1440);
+                    const remainingSeconds = totalSeconds % 1440;
+                    result.vinazhigai = Math.floor(remainingSeconds / 24);
+                    result.tharparai = remainingSeconds % 24;
+                }
+            }
+            else if (operation === 'addition') {
+                const totalSeconds = totalSeconds1 + totalSeconds2;
                 if (totalSeconds >= 0) {
                     result.nazhigai = Math.floor(totalSeconds / 1440);
                     const remainingSeconds = totalSeconds % 1440;
